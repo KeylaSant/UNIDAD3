@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #bad7f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container_app_vue">
+
+        <form>
+            <fieldset>
+                <legend>
+                    Email:
+                    <input autocomplete="no" type ="email" placeholder="write here" name="">
+                </legend>
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    Password:
+                    <input autocomplete="no" type ="password" placeholder="write here" name="">
+                </legend>
+            </fieldset>
+
+            <button  @click="login" type="button">
+                Access 
+            </button>
+
+        </form>
+
+        <!-- <h1> Hola {{ name }}</h1>
+
+        <input type="text" v-model="name" name="">
+
+        <br><br>
+
+        <button @click="count++">
+            Count is: {{ count }}
+        </button>
+
+        <br><br>
+
+        <input type="" v-model="numero1" name="">
+        <br>
+        <input type="" v-model="numero2" name="">
+        <br><br>
+        <button @click="result=((+numero1)+(+numero2))">
+            Suma
+        </button>
+
+        <h3>Resultado <span v-if="result!=0"> {{result}} </span></h3>
+
+        <hr>
+
+        <ul>
+            <li v-for ="item in persons">
+                {{item.name}} - {{item.lastname}}
+        </ul>
+        <form>
+
+            <fieldset>
+                <legend>
+                    Nombre(s):
+                </legend>
+                <input type = "text" v-model="username" name="">
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    Apellido(s):
+                </legend>
+                <input type = "text" v-model="lastname" name="">
+            </fieldset>
+
+            <button type="button" v-on:click="addPerson">
+                Save data
+            </button>
+
+        </form>
+
+        <h3>Resultado : <span v-if="result!=0"> {{ result }}</span> </h3> -->
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="text/javascript">
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                users = ref([]);
+
+                return{
+                    users
+                }
+            },
+
+            methods:{
+                async login(){
+                    const response = await fetch("users.json");
+                    const users = await response.json();
+
+                   let login = false;
+
+                   users.forEach((user) => {
+                     
+                        if(this.email==user.email){
+                            if(this.password ==  user.password
+                            ){
+                                alert("Bienvenido")
+                                login = true;
+                            }
+                        }
+                   });
+                   if(!login){
+                    alert("verifique su informacion")
+                   } 
+                }
+            }
+        }).mount('#container_app_vue')
+    </script>
+</body>
+
+</html>

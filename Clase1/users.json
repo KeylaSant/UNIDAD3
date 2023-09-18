@@ -1,0 +1,19 @@
+[
+    {
+        "name":"Keyla",
+        "last name":"Lopez",
+        "email":"keyla@uabcs.mx",
+        "password":"1234",
+        "role_id":1,
+        "avatar":""
+    },
+
+    {
+        "name":"Emiliano",
+        "last name":"Fernandez",
+        "email":"emiliano@uabcs.mx",
+        "password":"1234",
+        "role_id":1,
+        "avatar":""
+    }
+]

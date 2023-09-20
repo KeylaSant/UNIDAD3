@@ -9,32 +9,87 @@
         body {
             background-color: #bad7f2;
         }
+
+        table.customTable {
+            width: 100%;
+            background-color: #FFFFFF;
+            border-collapse: collapse;
+            border-width: 2px;
+            border-color: #BEF8A1;
+            border-style: solid;
+            color: #000000;
+        }
+
+        table.customTable td,
+        table.customTable th {
+            border-width: 2px;
+            border-color: #BEF8A1;
+            border-style: solid;
+            padding: 5px;
+        }
+
+        table.customTable thead {
+            background-color: #BEF8A1;
+        }
     </style>
 </head>
 
 <body>
     <div class="container" id="container_app_vue">
 
-        <form>
+        <form v-if="!is_login">
             <fieldset>
                 <legend>
                     Email:
-                    <input autocomplete="no" type ="email" placeholder="write here" name="">
                 </legend>
+                <input autocomplete="no" v-model="email" type="email" placeholder="write here" name="">
             </fieldset>
 
             <fieldset>
                 <legend>
                     Password:
-                    <input autocomplete="no" type ="password" placeholder="write here" name="">
                 </legend>
+                <input autocomplete="no" v-model="password" type="password" placeholder="write here" name="">
             </fieldset>
 
-            <button  @click="login" type="button">
-                Access 
+            <button @click="login" type="button">
+                Access
             </button>
 
         </form>
+
+        <table class="customTable" v-if="is_login">
+            <thead>
+                <tr>
+                    <th>
+                        Personal data
+                    </th>
+                    <th>
+                        Contact data
+                    </th>
+                    <th>
+                        Company data
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="u in users">
+                <td>
+                    {{u.name}}, {{u.username}}
+                </td>
+                <td>
+                    {{u.email}}, {{u.phone}}
+                </td>
+                <td>
+                    {{u.company.name}}, {{u.company.bs}}
+                </td>
+            </tr>
+        </tbody>
+        </table>
+        <!-- Generated at CSSPortal.com -->
+
+
 
         <!-- <h1> Hola {{ name }}</h1>
 
@@ -96,32 +151,58 @@
         createApp({
             setup() {
                 users = ref([]);
+                email = ref('');
+                password = ref('');
 
-                return{
-                    users
+                let tmp = localStorage.getItem("is_login");
+                if(tmp == null){
+                    tmp=false
+                }
+                is_login = ref(tmp)
+
+                return {
+                    users,
+                    email,
+                    password,
+                    is_login
                 }
             },
 
-            methods:{
-                async login(){
-                    const response = await fetch("users.json");
+            mounted: function(){
+                const getUsers = async() =>{
+
+                    const response = await fetch("users.json?v=1.1");
+                    const tmp_users = await response.json();
+                    this.users = tmp_users;
+                }
+                if(this.is_login){
+                    getUsers()
+                }
+
+            },
+
+            methods: {
+                async login() {
+                    const response = await fetch("users.json?v=1.1");
                     const users = await response.json();
 
-                   let login = false;
+                    this.is_login = false;
 
-                   users.forEach((user) => {
-                     
-                        if(this.email==user.email){
-                            if(this.password ==  user.password
-                            ){
+                    users.forEach((user) => {
+
+                        if (this.email == user.email) {
+                            if (this.password == user.password) {
+                                this.is_login = true;
                                 alert("Bienvenido")
-                                login = true;
+
+                                localStorage.setItem("user_data", JSON.stringify(user));
+                                localStorage.setItem("is_login","true");
                             }
                         }
-                   });
-                   if(!login){
-                    alert("verifique su informacion")
-                   } 
+                    });
+                    if (!this.is_login) {
+                        alert("verifique su informacion")
+                    }
                 }
             }
         }).mount('#container_app_vue')
